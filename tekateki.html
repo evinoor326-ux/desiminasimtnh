@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TEKA-TEKI</title>
+  <style>
+    :root{font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+    body{display:flex;min-height:100vh;align-items:center;justify-content:center;background:#f0f7ff;margin:0;padding:20px}
+    .card{background:white;border-radius:12px;box-shadow:0 6px 18px rgba(20,30,70,0.08);max-width:600px;width:100%;padding:28px}
+    header{text-align:center;margin-bottom:18px}
+    h1{margin:0;font-size:28px;letter-spacing:1px}
+    p.question{font-size:18px;background:#f7fbff;padding:14px;border-radius:8px;border:1px solid #e3f0ff}
+    .controls{display:flex;gap:10px;margin-top:16px}
+    input[type="text"]{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #cbd8ef;font-size:16px}
+    button{padding:10px 14px;border-radius:8px;border:0;background:#0b63d6;color:white;font-weight:600;cursor:pointer}
+    button:active{transform:translateY(1px)}
+    .feedback{margin-top:12px;min-height:28px;font-weight:600}
+    .feedback.correct{color: #0a7a3a}
+    .feedback.wrong{color:#b32424}
+    .hint{margin-top:10px;font-size:13px;color:#666}
+    @media (max-width:480px){h1{font-size:22px}}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <header>
+      <h1>TEKA-TEKI</h1>
+    </header>
+
+    <section>
+      <p class="question">"Aku adalah seekor hewan. Jumlah kakiku ada empat buah. Aku memiliki ekor. Aku juga memiliki belalai. Siapakah aku?"</p>
+
+      <div class="controls" aria-live="polite">
+        <label for="answerInput" class="sr-only">Jawaban</label>
+        <input id="answerInput" type="text" placeholder="Ketik jawabanmu di sini..." autocomplete="off" />
+        <button id="submitBtn">Jawab</button>
+      </div>
+
+      <div id="feedback" class="feedback" aria-live="assertive"></div>
+      <div class="hint">Jawaban diterima: <em>Gajah</em> (format huruf tidak masalah).</div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      const input = document.getElementById('answerInput');
+      const btn = document.getElementById('submitBtn');
+      const feedback = document.getElementById('feedback');
+
+      function normalize(s){
+        return s.replace(/\s+/g,' ').trim().toLowerCase();
+      }
+
+      function checkAnswer(){
+        const user = normalize(input.value);
+        if(!user){
+          feedback.textContent = 'Silahkan masukkan jawaban terlebih dahulu.';
+          feedback.className = 'feedback wrong';
+          return;
+        }
+
+        if(user === 'gajah'){
+          feedback.textContent = 'Jawaban Anda benar, hebat';
+          feedback.className = 'feedback correct';
+        } else {
+          feedback.textContent = 'Jawaban Anda salah, silahkan coba lagi.';
+          feedback.className = 'feedback wrong';
+        }
+      }
+
+      btn.addEventListener('click', checkAnswer);
+      input.addEventListener('keydown', function(e){
+        if(e.key === 'Enter'){
+          e.preventDefault();
+          checkAnswer();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
